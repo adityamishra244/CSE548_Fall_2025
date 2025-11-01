@@ -5,7 +5,7 @@ from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 
-def multiControllerNet():
+def multiControllerSingleSwitchNet():
     #Create 2-Controller, 1-Switch and 4-Host 
     net = Mininet(controller=Controller, switch=OVSSwitch, autoSetMacs=True)
 
@@ -40,4 +40,4 @@ def multiControllerNet():
 
 if __name__ == '__main__':
     setLogLevel('info')
-    multiControllerNet()
+    multiControllerSingleSwitchNet()
