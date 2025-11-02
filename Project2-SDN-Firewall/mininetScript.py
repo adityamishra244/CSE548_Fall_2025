@@ -54,8 +54,8 @@ def sdnController():
     net.start()
     display_links(net)
     # --- Apply Firewall Rules Here ---
-    l2config_path = /home/aditya244/Downloads/pox/l2firewall.config
-    l3config_path = /home/aditya244/Downloads/pox/l3firewall.config
+    l2config_path = "/home/aditya244/Downloads/pox/l2firewall.config"
+    l3config_path = "/home/aditya244/Downloads/pox/l3firewall.config"
     
     configure_firewall(h1, l2config_path)
     configure_firewall(h2, l2config_path)
