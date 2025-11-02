@@ -45,11 +45,7 @@ def display_links(net):
     for link in net.links:
         node1 = link.intf1.node.name
         node2 = link.intf2.node.name
-        node3 = link.intf3.node.name
-        node4 = link.intf4.node.name
-        node5 = link.intf5.node.name
-        node6 = link.intf6.node.name
-        link_strings.append(f"({node1}, {node2}, {node3}, {node4}, {node5}, {node6})")
+        link_strings.append(f"({node1}, {node2})")
     
     print(" ".join(link_strings))
     print("----------------------\n")
