@@ -35,14 +35,25 @@ def sdnController():
 
     info('*** Starting network\n')
     net.start()
-    #net.build()
-    #c1.start()
-    #c2.start()
-    #s1.start([c1])
-
+    display_links(net)
     CLI(net)
     net.stop()
 
+def display_links(net):
+    print("\n--- Added links: ---")
+    link_strings = []
+    for link in net.links:
+        node1 = link.intf1.node.name
+        node2 = link.intf2.node.name
+        node3 = link.intf3.node.name
+        node4 = link.intf4.node.name
+        node5 = link.intf5.node.name
+        node6 = link.intf6.node.name
+        link_strings.append(f"({node1}, {node2}, {node3}, {node4}, {node5}, {node6})")
+    
+    print(" ".join(link_strings))
+    print("----------------------\n")
+    
 if __name__ == '__main__':
     setLogLevel('info')
     sdnController()
