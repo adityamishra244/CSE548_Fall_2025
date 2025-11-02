@@ -82,7 +82,7 @@ def display_links(net):
 
 # Function to apply firewall rules to a given host
 def configure_firewall(host, rules_config_file):
-    info(f'*** Applying firewall rules to {host.name} from {rules_file}\n')
+    info(f'*** Applying firewall rules to {host.name} from {rules_config_file}\n')
     # Clear existing rules and set default policy to DROP for incoming traffic
     host.cmd('iptables -F')
     host.cmd('iptables -P INPUT DROP')
