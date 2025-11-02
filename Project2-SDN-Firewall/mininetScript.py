@@ -30,8 +30,8 @@ def sdnController():
 
     # Mininet automatically connects controllers to switches
     # but if we want to add explicit links if needed:
-    # net.addLink(c1, s1)
-    # net.addLink(c2, s1)
+    net.addLink(c1, s1)
+    net.addLink(c2, s1)
 
     info('*** Starting network\n')
     net.start()
