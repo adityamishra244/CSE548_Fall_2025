@@ -53,6 +53,19 @@ def sdnController():
     info('*** Starting network\n')
     net.start()
     display_links(net)
+    # --- Apply Firewall Rules Here ---
+    l2config_path = /home/aditya244/Downloads/pox/l2firewall.config
+    l3config_path = /home/aditya244/Downloads/pox/l3firewall.config
+    
+    configure_firewall(h1, l2config_path)
+    configure_firewall(h2, l2config_path)
+    configure_firewall(h3, l2config_path)
+    configure_firewall(h4, l2config_path)
+    configure_firewall(h1, l3config_path)
+    configure_firewall(h2, l3config_path)
+    configure_firewall(h3, l3config_path)
+    configure_firewall(h4, l3config_path)
+    # ----------------------------------
     CLI(net)
     net.stop()
 
@@ -66,6 +79,24 @@ def display_links(net):
     
     print(" ".join(link_strings))
     print("----------------------\n")
+
+# Function to apply firewall rules to a given host
+def configure_firewall(host, rules_config_file):
+    info(f'*** Applying firewall rules to {host.name} from {rules_file}\n')
+    # Clear existing rules and set default policy to DROP for incoming traffic
+    host.cmd('iptables -F')
+    host.cmd('iptables -P INPUT DROP')
+    host.cmd('iptables -P FORWARD DROP')
+    host.cmd('iptables -P OUTPUT ACCEPT') # Allow all outgoing for simplicity
+
+    # Apply rules from the file using iptables-restore
+    try:
+        # Assuming the rules file contains iptables-restore format rules
+        # You need to ensure the rules file is accessible in the Mininet environment
+        host.cmd(f'iptables-restore < {rules_config_file}')
+        info(f'*** Rules applied to {host.name}\n')
+    except Exception as e:
+        info(f'*** Error applying rules to {host.name}: {e}\n')
     
 if __name__ == '__main__':
     setLogLevel('info')
