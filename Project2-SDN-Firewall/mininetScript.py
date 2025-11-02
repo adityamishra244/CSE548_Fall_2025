@@ -34,8 +34,8 @@ def sdnController():
     # net.addLink(c2, s1)
 
     info('*** Starting network\n')
-    #net.start()
-    net.build()
+    net.start()
+    #net.build()
     c1.start()
     c2.start()
     s1.start([c1])
