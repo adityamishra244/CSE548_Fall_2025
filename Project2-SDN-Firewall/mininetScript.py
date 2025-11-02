@@ -36,9 +36,9 @@ def sdnController():
     info('*** Starting network\n')
     net.start()
     #net.build()
-    c1.start()
-    c2.start()
-    s1.start([c1])
+    #c1.start()
+    #c2.start()
+    #s1.start([c1])
 
     CLI(net)
     net.stop()
