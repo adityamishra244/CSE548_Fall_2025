@@ -16,11 +16,28 @@ def sdnController():
     info('*** Adding switch\n')
     s1 = net.addSwitch('s1')
 
+
     info('*** Adding hosts\n')
-    h1 = net.addHost('h1')
-    h2 = net.addHost('h2')
-    h3 = net.addHost('h3')
-    h4 = net.addHost('h4')
+    #Task-1
+    #h1 = net.addHost('h1')
+    #h2 = net.addHost('h2')
+    #h3 = net.addHost('h3')
+    #h4 = net.addHost('h4')
+
+    #Task-2
+    info('*** Adding hosts\n')
+    # Assign IP address 192.168.2.10 to container host #1
+    h1 = net.addHost('h1', ip='192.168.2.10/24')
+    
+    # Assign IP address 192.168.2.20 to container host #2
+    h2 = net.addHost('h2', ip='192.168.2.20/24')
+    
+    # Assign IP address 192.168.2.30 to container host #3
+    h3 = net.addHost('h3', ip='192.168.2.30/24')
+    
+    # Assign IP address 192.168.2.40 to container host #4
+    h4 = net.addHost('h4', ip='192.168.2.40/24')
+
 
     info('*** Creating links\n')
     net.addLink(s1, h1)
