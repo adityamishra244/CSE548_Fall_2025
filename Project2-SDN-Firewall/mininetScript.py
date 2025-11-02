@@ -5,7 +5,7 @@ from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 
-def multiControllerSingleSwitchNet():
+def sdnController():
     #Create 2-Controller, 1-Switch and 4-Host 
     net = Mininet(controller=Controller, switch=OVSSwitch, autoSetMacs=True)
 
@@ -29,15 +29,20 @@ def multiControllerSingleSwitchNet():
     net.addLink(s1, h4)
 
     # Mininet automatically connects controllers to switches
-    # but you can add explicit links if needed:
+    # but if we want to add explicit links if needed:
     # net.addLink(c1, s1)
     # net.addLink(c2, s1)
 
     info('*** Starting network\n')
-    net.start()
+    #net.start()
+    net.build()
+    c1.start()
+    c2.start()
+    s1.start([c1])
+
     CLI(net)
     net.stop()
 
 if __name__ == '__main__':
     setLogLevel('info')
-    multiControllerSingleSwitchNet()
+    sdnController()
