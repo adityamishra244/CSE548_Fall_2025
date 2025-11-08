@@ -1,0 +1,5 @@
+# /home/aditya244/Downloads/pox/l3firewall.iptables
+
+# Test Mac Address of h-4 blocking h-2 traffic
+#-A OUTPUT -m mac --mac-source 00:00:00:00:00:02 -d 192.168.2.40 -j DROP
+-A OUTPUT -m mac --mac-source 00:00:00:00:00:02 -m mac --mac-destination 00:00:00:00:00:04 -j DROP
