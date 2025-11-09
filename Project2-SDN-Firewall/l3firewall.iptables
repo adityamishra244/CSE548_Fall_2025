@@ -22,6 +22,4 @@
 # Rule 5: Drop UDP from 192.168.2.10 (h1) to 192.168.2.20 (h2)
 -A OUTPUT -p udp -s 192.168.2.10 -d 192.168.2.20 -j DROP
 
-# --- Default Policy is ALLOW ALL (ACCEPT) ---
-# Note: The :OUTPUT ACCEPT [0:0] line above already sets the policy.
 COMMIT
