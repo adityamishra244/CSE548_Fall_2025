@@ -46,7 +46,7 @@ class Firewall (EventMixin):
 		self.disbaled_MAC_pair = [] # Shore a tuple of MAC pair which will be installed into the flow table of each switch.
 		self.fwconfig = list()
               
-                #blocked mac set   
+                #blocked mac set
                 self.blocked_macs = set()
 
                 #-------Initialize Attack Detection State ------------------------------
@@ -142,31 +142,6 @@ class Firewall (EventMixin):
 		sport = str(match.tp_src)
 		dport = str(match.tp_dst)
 		nwproto = str(match.nw_proto)
-
-                '''
-                #changes by Aditya for blocking DOS Attack....
-                src_ip = str(match.nw_src)
-                dst_ip = str(match.nw_dst)
-                log.debug("Incoming Packet : Source_IP=%s -> DST_IP=%s", src_ip, dst_ip)
-
-               
-                # PORT_TABLE update
-                if srcmac not in PORT_TABLE.keys():
-                   PORT_TABLE[srcmac] = src_ip
-                else:
-                   #incoming ip is present in  PORT_TABLE, legit ip 
-                   if src_ip == PORT_TABLE[srcmac]:
-                      pass
-                   else:
-                      #DOS attack by spoofing ip, block
-                      prio1 = 65535
-                      self.installFlow(event, 4, EthAddr(srcmac), EthAddr(dstmac), src_ip, dst_ip, None, None, 1)
-                      log.debug("Blocked DDOS Attack from spoofed ip: %s", src_ip)
-                      self.block_ip(event, src_ip)
-                      log.debug("Blocked DDOS attack from src mac: %s (port=%s)", srcmac, sport)
-                      self.block_mac(event, srcmac, sport)
-                '''   
-  
 
 		with open(l3config) as csvfile:
 			log.debug("Reading log file !")
@@ -280,6 +255,7 @@ class Firewall (EventMixin):
 
                #---call the  flow_monitor program-----
                subprocess.call(["python3", FLOW_MONITOR]) 
+               
                return False
   
             #---Flow-level monitoring ---
@@ -288,10 +264,11 @@ class Firewall (EventMixin):
             # All good
             return True  
         
+        '''
         def monitor_log_flows(self):
-            '''
-            Monitor flows on switch s1 and prints the log
-            '''
+            
+            #Monitor flows on switch s1 and prints the log
+            
             try:
                 output = subprocess.check_output(["ovs-ofctl", "dump-flows", "s1"]).decode()
             except Exception as e:
@@ -300,7 +277,7 @@ class Firewall (EventMixin):
             print("-------Current flows on s1--------")
             print(output)
             prnt("====================================")        
-
+         '''
 
         def detect_attack(self, event, src_mac, src_ip):
                 log.info("Dos detect attack called...")
