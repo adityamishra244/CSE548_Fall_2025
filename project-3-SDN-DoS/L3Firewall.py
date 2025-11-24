@@ -36,7 +36,7 @@ l3config = "l3firewall.config"
 
 #POX_BASE = os.path.dirname(os.path.dirname(os.path.abspath(_file_))
 #L2_CONFIG_PATH = os.path.join(POX_BASE, "l2firewall.config")
-#L2_CONFIG_PATH = "/home/ubuntu/pox/l2firewall.config"
+L2_CONFIG_PATH = "/home/ubuntu/pox/l2firewall.config"
 FLOW_MONITOR = "/home/ubuntu/pox/pox/forwarding/flow_monitor.py"
 
 class Firewall (EventMixin):
@@ -227,12 +227,10 @@ class Firewall (EventMixin):
             if src_mac not in PORT_TABLE:
                log.warning("Unknown Mac detected: %s", src_mac)
                
-               #write to l2firewall.config
-               #with open(L2_CONFIG_PATH, "a") as f:
-               #     rule_id = len(open(L2_CONFIG_PATH).readlines())
-                    #f.write(f"{rule_id},{src_mac},any\n") #add block rule with id
-               #     f.write("{},{},any\n".format(rule_id, src_mac))
-                    #f.write(str(rule_id) + "," + src_mac + ",any\n")  
+               #write to l2firewall.config--realtime update
+               with open(L2_CONFIG_PATH, "a") as f:
+                    rule_id = len(open(L2_CONFIG_PATH).readlines())
+                    f.write("{},{},any\n".format(rule_id, src_mac)) 
                
                self.block_mac(event,src_mac,in_port=event.port)
                self.block_ip(event, src_ip)
@@ -245,10 +243,9 @@ class Firewall (EventMixin):
             expected_ip = PORT_TABLE[src_mac]
             if src_ip != expected_ip:
                log.warning("IP Spoofing Detected: Mac %s sent IP %s (expected %s)", src_mac, src_ip, expected_ip)
-               #with open(L2_CONFIG_PATH, "a") as f:
-               #     rule_id = len(open(L2_CONFIG_PATH).readlines())
-                    #f.write(f"{rule_id},{src_mac},any")
-               #     f.write("{},{},any\n".format(rule_id, src_mac))
+               with open(L2_CONFIG_PATH, "a") as f:
+                    rule_id = len(open(L2_CONFIG_PATH).readlines())
+                    f.write("{},{},any\n".format(rule_id, src_mac))
                
                self.block_mac(event,src_mac, in_port=event.port)
                self.block_ip(event,src_ip)
@@ -280,7 +277,7 @@ class Firewall (EventMixin):
          '''
 
         def detect_attack(self, event, src_mac, src_ip):
-                log.info("Dos detect attack called...")
+                #log.info("Dos detect attack called...")
                 curr_time = time.time()
                 port = int(event.port)   #switch ingress port
 
