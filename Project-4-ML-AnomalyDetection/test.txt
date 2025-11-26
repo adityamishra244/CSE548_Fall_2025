@@ -23,3 +23,6 @@ elif scenario == 'b':
 elif scenario == 'c':
     TrainingData = scenarios['c'][0]
     TestingData = scenarios['c'][1]
+
+X_train, y_train = dp.get_processed_data(TrainingData+'.csv', './categoryMappings/', classType ='binary')
+X_test,  y_test  = dp.get_processed_data(TestingData+'.csv',  './categoryMappings/', classType ='binary')
