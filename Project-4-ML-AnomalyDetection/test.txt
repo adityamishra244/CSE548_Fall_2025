@@ -1,1 +1,25 @@
-test
+scenarios = {
+    'a': ['Training-a1-a3.csv', 'Testing-a2-a4.csv'],
+    'b': ['Training-a1-a2.csv', 'Testing-a1.csv'],
+    'c': ['Training-a1-a2.csv', 'Testing-a1-a2-a3.csv']
+}
+
+for scenario, (TrainingData, TestingData) in scenarios.items():
+    print(f'Please enter the scenario you wish to run - either {scenario}, {scenario.upper()}, or {scenario.capitalize()}:')
+    user_input = input()
+
+    if user_input.lower() == scenario.lower():
+        break
+    else:
+        print('Invalid scenario. Please try again.')
+
+# Assign the selected training and testing dataset names
+if scenario == 'a':
+    TrainingData = scenarios['a'][0]
+    TestingData = scenarios['a'][1]
+elif scenario == 'b':
+    TrainingData = scenarios['b'][0]
+    TestingData = scenarios['b'][1]
+elif scenario == 'c':
+    TrainingData = scenarios['c'][0]
+    TestingData = scenarios['c'][1]
