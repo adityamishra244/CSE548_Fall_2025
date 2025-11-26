@@ -26,3 +26,22 @@ elif scenario == 'c':
 
 X_train, y_train = dp.get_processed_data(TrainingData+'.csv', './categoryMappings/', classType ='binary')
 X_test,  y_test  = dp.get_processed_data(TestingData+'.csv',  './categoryMappings/', classType ='binary')
+===
+
+print('Please enter the scenario you wish to run: either a, b, or c')
+for key in scenarios.keys():
+    print(f'  - {key}, or {key.upper()}')
+
+# Loop until user enters a valid choice
+while True:
+    user_input = input('Enter your choice: ').lower().strip()
+    if user_input in scenarios:
+        TrainingData, TestingData = scenarios[user_input]
+        break
+    else:
+        print('Invalid scenario. Please try again.')
+
+# Display the selected datasets
+print(f"\nYou selected scenario '{user_input.upper()}'.")
+print(f"Training data: {TrainingData}")
+print(f"Testing data: {TestingData}")
