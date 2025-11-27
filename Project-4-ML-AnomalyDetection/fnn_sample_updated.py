@@ -15,6 +15,9 @@ Updated on Wed Jan 29 10:18:09 2020
 import pandas as pd
 # Import numpy to perform operations on the dataset
 import numpy as np
+#import tensorflow as tf
+import data_preprocessor as data_pre
+
 
 #===Updated code to process all 3 Testing Scenarios======
 scenarios = {
@@ -23,15 +26,28 @@ scenarios = {
     'c': ['Training-a1-a2', 'Testing-a1-a2-a3']
 }
 
-for scenario, (TrainingData, TestingData) in scenarios.items():
-    print(f'Please enter the scenario you wish to run -: either {scenario}, or {scenario.upper()} ')
-    user_input = input()
+print('Please enter the scenario you wish to run: either a, b, or c')
+for key in scenarios.keys():
+    print(f'  - {key}, or {key.upper()}')
 
-    if user_input.lower() == scenario.lower():
+# Loop until user enters a valid choice
+while True:
+    user_input = input('Enter your choice: ').lower().strip()
+    if user_input in scenarios:
+        TrainingData, TestingData = scenarios[user_input]
         break
     else:
         print('Invalid scenario. Please try again.')
 
+# Display the selected datasets
+print(f"\nYou selected scenario '{user_input.upper()}'.")
+print(f"Training data: {TrainingData}")
+print(f"Testing data: {TestingData} \n")
+
+
+TrainingData, TestingData = scenarios[user_input]
+
+'''
 # Assign the selected training and testing dataset names
 if scenario == 'a':
     TrainingData = scenarios['a'][0]
@@ -42,6 +58,22 @@ elif scenario == 'b':
 elif scenario == 'c':
     TrainingData = scenarios['c'][0]
     TestingData = scenarios['c'][1]
+'''
+
+#BatchSize=10
+BatchSize=15
+#BatchSize=20
+#NumEpoch=10
+NumEpoch=15
+#NumEpoch=20
+
+
+X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
+X_test,  y_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary')
+
+#tf.autograph.set_verbosity(0)
+#@tf.autograph.experimental.do_not_convert
+
 #========================================================
 
 # Variable Setup
@@ -53,9 +85,9 @@ elif scenario == 'c':
 #TrainingData='KDDTest+.txt'
 #TrainingData='KDDTest-21.txt'
 # Batch Size
-BatchSize=10
+#BatchSize=10
 # Epohe Size
-NumEpoch=10
+#NumEpoch=10
 
 
 # Import dataset.
@@ -78,14 +110,6 @@ for i in range(len(label_column)):
 # Convert ist to array
 y = np.array(y)
 '''
-
-#==========================================================
-import data_preprocessor as data_pre
-
-X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './categoryMappings/', classType ='binary')
-X_test,  y_test  = data_pre.get_processed_data(TestingData+'.csv',  './categoryMappings/', classType ='binary')
-
-#==========================================================
 
 # Encoding categorical data (convert letters/words in numbers)
 # Reference: https://medium.com/@contactsunny/label-encoder-vs-one-hot-encoder-in-machine-learning-3fc273365621
@@ -217,3 +241,4 @@ plt.xlabel('epoch')
 plt.legend(['train'], loc='upper left')
 plt.savefig('loss_sample.png')
 plt.show()
+
