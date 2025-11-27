@@ -45,3 +45,29 @@ while True:
 print(f"\nYou selected scenario '{user_input.upper()}'.")
 print(f"Training data: {TrainingData}")
 print(f"Testing data: {TestingData}")
+
+#============================
+Test Result:
+SA:
+Loss [0,1]: 1.3399 Accuracy [0,1]: 0.8192
+Print the Confusion Matrix:
+[ TN, FP ]
+[ FN, TP ]=
+[[8716  995]
+ [2491 2815]]
+
+SB:
+Loss [0,1]: 1.5523 Accuracy [0,1]: 0.9062
+Print the Confusion Matrix:
+[ TN, FP ]
+[ FN, TP ]=
+[[8960  751]
+ [1175 6285]]
+
+SC:
+Loss [0,1]: 1.3092 Accuracy [0,1]: 0.9036
+Print the Confusion Matrix:
+[ TN, FP ]
+[ FN, TP ]=
+[[8973  738]
+ [2096 7852]]
