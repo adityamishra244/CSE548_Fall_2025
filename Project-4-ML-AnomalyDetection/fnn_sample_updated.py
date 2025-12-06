@@ -231,7 +231,6 @@ print('[ TN, FP ]')
 print('[ FN, TP ]=')
 print(cm)
 
-
 def calculate_tpr_per_attack(y_true, y_pred, subclass_labels, attack_class):
     """
     Calculates TPR (accuracy for attack detection) for a given unknown attack class.
@@ -247,14 +246,15 @@ def calculate_tpr_per_attack(y_true, y_pred, subclass_labels, attack_class):
         return 0.0
     return TP / (TP + FN)
 
-if user_input == 'a' or 'A':
+
+if user_input.lower() == 'a':
     print(f"SA TPR Calculation for unknown attacks")
     tpr_A2 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A2')
     tpr_A4 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A4')
     avg_tpr_SA = (tpr_A2 + tpr_A4) / 2
     print(f"Average TPR (SA unknown attacks): {avg_tpr_SA:.4f}")
 
-elif user_input == 'c' or 'C':
+elif user_input.lower() == 'c':
     print(f"SC TPR Calculation for unknown attacks")
     tpr_A3 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A3')
     print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
