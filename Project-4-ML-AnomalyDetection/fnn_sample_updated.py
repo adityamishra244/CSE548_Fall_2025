@@ -60,11 +60,11 @@ elif scenario == 'c':
     TestingData = scenarios['c'][1]
 '''
 
-#BatchSize=10
-BatchSize=15
+BatchSize=10
+#BatchSize=15
 #BatchSize=20
 #NumEpoch=10
-NumEpoch=15
+NumEpoch=10
 #NumEpoch=20
 
 
@@ -185,10 +185,11 @@ classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = [
 # Train the model so that it learns a good (or good enough) mapping of rows of input data to the output classification.
 # add verbose=0 to turn off the progress report during the training
 # To run the whole training dataset as one Batch, assign batch size: BatchSize=X_train.shape[0]
-classifierHistory = classifier.fit(X_train, y_train, batch_size = BatchSize, epochs = NumEpoch)
+classifierHistory = classifier.fit(X_train, y_train, batch_size = BatchSize, epochs = NumEpoch, validation_data=(X_test, y_test))
 
 # evaluate the keras model for the provided model and dataset
 loss, accuracy = classifier.evaluate(X_train, y_train)
+#loss, accuracy = classifier.evaluate(X_test, y_test)
 print('Print the loss and the accuracy of the model on the dataset')
 print('Loss [0,1]: %.4f' % (loss), 'Accuracy [0,1]: %.4f' % (accuracy))
 
@@ -213,6 +214,15 @@ print('[ TN, FP ]')
 print('[ FN, TP ]=')
 print(cm)
 
+TN = cm[0, 0]
+FP = cm[0, 1]
+FN = cm[1, 0]
+TP = cm[1, 1]
+
+total_samples = TP + TN + FP + FN
+accuracy = (TP + TN) / total_samples
+
+print(f"\nCalculated Testing Accuracy: {accuracy:.4f}")
 ########################################
 # Part 4 - Visualizing
 #######################################
@@ -241,4 +251,3 @@ plt.xlabel('epoch')
 plt.legend(['train'], loc='upper left')
 plt.savefig('loss_sample.png')
 plt.show()
-
