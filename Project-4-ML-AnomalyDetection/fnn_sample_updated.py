@@ -56,7 +56,7 @@ NumEpoch=10
 
 
 X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
-X_test,  y_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary')
+X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary', return_subclass=True)
 
 '''
 # Assign the selected training and testing dataset names
@@ -247,15 +247,17 @@ def calculate_tpr_per_attack(y_true, y_pred, subclass_labels, attack_class):
         return 0.0
     return TP / (TP + FN)
 
-print(f"SA TPR Calculation for unknown attacks")
-tpr_A2 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A2')
-tpr_A4 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A4')
-avg_tpr_SA = (tpr_A2 + tpr_A4) / 2
-print(f"Average TPR (SA unknown attacks): {avg_tpr_SA:.4f}")
+if user_input == 'a' or 'A':
+    print(f"SA TPR Calculation for unknown attacks")
+    tpr_A2 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A2')
+    tpr_A4 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A4')
+    avg_tpr_SA = (tpr_A2 + tpr_A4) / 2
+    print(f"Average TPR (SA unknown attacks): {avg_tpr_SA:.4f}")
 
-print(f"SC TPR Calculation for unknown attacks")
-tpr_A3 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A3')
-print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
+elif user_input == 'c' or 'C':
+    print(f"SC TPR Calculation for unknown attacks")
+    tpr_A3 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A3')
+    print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
 
 #TN = cm[0, 0]
 #FP = cm[0, 1]
