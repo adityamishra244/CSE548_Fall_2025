@@ -159,7 +159,7 @@ X_test = sc.fit_transform(X_test)
 # Importing the Keras libraries and packages
 #import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 
 # Initialising the ANN
 # Reference: https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/
@@ -168,9 +168,11 @@ classifier = Sequential()
 # Adding the input layer and the first hidden layer, 6 nodes, input_dim specifies the number of variables
 # rectified linear unit activation function relu, reference: https://machinelearningmastery.com/rectified-linear-activation-function-for-deep-learning-neural-networks/
 classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = len(X_train[0])))
+classifier.add(Dropout(0.2))
 
 # Adding the second hidden layer, 6 nodes
 classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu'))
+classifier.add(Dropout(0.2))
 
 # Adding the output layer, 1 node, 
 # sigmoid on the output layer is to ensure the network output is between 0 and 1
@@ -199,7 +201,8 @@ print('Loss [0,1]: %.4f' % (loss), 'Accuracy [0,1]: %.4f' % (accuracy))
 
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
-y_pred = (y_pred > 0.9)   # y_pred is 0 if less than 0.9 or equal to 0.9, y_pred is 1 if it is greater than 0.9
+#y_pred = (y_pred > 0.9)   # y_pred is 0 if less than 0.9 or equal to 0.9, y_pred is 1 if it is greater than 0.9
+y_pred = (y_pred > 0.5).astype(int)
 # summarize the first 5 cases
 #for i in range(5):
 #	print('%s => %d (expected %d)' % (X_test[i].tolist(), y_pred[i], y_test[i]))
@@ -291,6 +294,8 @@ else:
 plt.title('Model Accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
+#plt.xlim(xmin=0)
+#plt.ylim(ymin=0)
 plt.savefig('accuracy_train_test.png')
 plt.show()
 
@@ -309,5 +314,7 @@ else:
 plt.title('Model Loss')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
+#plt.xlim(xmin=0)
+#plt.ylim(ymin=0)
 plt.savefig('loss_train_test.png')
 plt.show()
