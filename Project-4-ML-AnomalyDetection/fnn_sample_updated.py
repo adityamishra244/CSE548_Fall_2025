@@ -191,9 +191,23 @@ classifierHistory = classifier.fit(X_train, y_train, batch_size = BatchSize, epo
 
 # evaluate the keras model for the provided model and dataset
 loss, accuracy = classifier.evaluate(X_train, y_train)
-#loss, accuracy = classifier.evaluate(X_test, y_test)
-print('Print the loss and the accuracy of the model on the dataset')
+test_loss, test_accuracy = classifier.evaluate(X_test, y_test)
+print('Print the Training loss and the accuracy of the model on the dataset')
 print('Loss [0,1]: %.4f' % (loss), 'Accuracy [0,1]: %.4f' % (accuracy))
+print('Print the testing loss and the accuracy of the model on the dataset')
+print('Loss [0,1]: %.4f' % (test_loss), 'Accuracy [0,1]: %.4f' % (test_accuracy))
+
+# Get the final epoch’s training and validation metrics
+final_train_acc = classifierHistory.history['accuracy'][-1]
+final_train_loss = classifierHistory.history['loss'][-1]
+final_val_acc = classifierHistory.history['val_accuracy'][-1]
+final_val_loss = classifierHistory.history['val_loss'][-1]
+
+print("\n=== Final Model Performance ===")
+print(f"Training Accuracy:  {final_train_acc:.4f}")
+print(f"Training Loss:      {final_train_loss:.4f}")
+print(f"Validation Accuracy: {final_val_acc:.4f}")
+print(f"Validation Loss:     {final_val_loss:.4f}")
 
 ########################################
 # Part 3 - Making predictions and evaluating the model
