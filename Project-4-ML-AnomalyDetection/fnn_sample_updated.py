@@ -231,10 +231,27 @@ print('[ TN, FP ]')
 print('[ FN, TP ]=')
 print(cm)
 
+for subclass in ['A2', 'A4']:
+    mask = subclass_labels == subclass
+    y_true_sub = test_y[mask]
+    y_pred_sub = predicted_y[mask]
+    
+    TP = np.sum((y_pred_sub == 1) & (y_true_sub == 1))
+    FN = np.sum((y_pred_sub == 0) & (y_true_sub == 1))
+    TPR = TP / (TP + FN + 1e-10)
+    print(f"TPR for {subclass}: {TPR:.4f}")
+    
+'''    
 def calculate_tpr_per_attack(y_true, y_pred, subclass_labels, attack_class):
     """
     Calculates TPR (accuracy for attack detection) for a given unknown attack class.
     """
+    
+    print(subclass_labels.shape, type(subclass_labels))
+    print(type(attack_class), attack_class)
+    
+    attack_class = attack_class.item() if isinstance(attack_class, np.ndarray) else attack_class
+       
     mask = subclass_labels == attack_class
     y_true_filtered = y_true[mask]
     y_pred_filtered = y_pred[mask]
@@ -249,16 +266,16 @@ def calculate_tpr_per_attack(y_true, y_pred, subclass_labels, attack_class):
 
 if user_input.lower() == 'a':
     print(f"SA TPR Calculation for unknown attacks")
-    tpr_A2 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A2')
-    tpr_A4 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A4')
+    tpr_A2 = calculate_tpr_per_attack(y_test, y_pred.flatten(), subclass_labels_test, 'A2')
+    tpr_A4 = calculate_tpr_per_attack(y_test, y_pred.flatten(), subclass_labels_test, 'A4')
     avg_tpr_SA = (tpr_A2 + tpr_A4) / 2
     print(f"Average TPR (SA unknown attacks): {avg_tpr_SA:.4f}")
 
 elif user_input.lower() == 'c':
     print(f"SC TPR Calculation for unknown attacks")
-    tpr_A3 = calculate_tpr_per_attack(y_test, y_pred, subclass_labels_test, 'A3')
+    tpr_A3 = calculate_tpr_per_attack(y_test, y_pred.flatten(), subclass_labels_test, 'A3')
     print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
-
+'''
 #TN = cm[0, 0]
 #FP = cm[0, 1]
 #FN = cm[1, 0]
