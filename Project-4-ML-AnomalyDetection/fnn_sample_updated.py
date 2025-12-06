@@ -47,6 +47,17 @@ print(f"Testing data: {TestingData} \n")
 
 TrainingData, TestingData = scenarios[user_input]
 
+BatchSize=10
+#BatchSize=15
+#BatchSize=20
+#NumEpoch=10
+NumEpoch=10
+#NumEpoch=20
+
+
+X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
+X_test,  y_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary')
+
 '''
 # Assign the selected training and testing dataset names
 if scenario == 'a':
@@ -59,18 +70,6 @@ elif scenario == 'c':
     TrainingData = scenarios['c'][0]
     TestingData = scenarios['c'][1]
 '''
-
-BatchSize=10
-#BatchSize=15
-#BatchSize=20
-#NumEpoch=10
-NumEpoch=10
-#NumEpoch=20
-
-
-X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
-X_test,  y_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary')
-
 #tf.autograph.set_verbosity(0)
 #@tf.autograph.experimental.do_not_convert
 
@@ -168,11 +167,11 @@ classifier = Sequential()
 # Adding the input layer and the first hidden layer, 6 nodes, input_dim specifies the number of variables
 # rectified linear unit activation function relu, reference: https://machinelearningmastery.com/rectified-linear-activation-function-for-deep-learning-neural-networks/
 classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = len(X_train[0])))
-classifier.add(Dropout(0.2))
+#classifier.add(Dropout(0.2))
 
 # Adding the second hidden layer, 6 nodes
 classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu'))
-classifier.add(Dropout(0.2))
+#classifier.add(Dropout(0.2))
 
 # Adding the output layer, 1 node, 
 # sigmoid on the output layer is to ensure the network output is between 0 and 1
@@ -191,7 +190,8 @@ classifierHistory = classifier.fit(X_train, y_train, batch_size = BatchSize, epo
 
 # evaluate the keras model for the provided model and dataset
 loss, accuracy = classifier.evaluate(X_train, y_train)
-test_loss, test_accuracy = classifier.evaluate(X_test, y_test)
+#test_loss, test_accuracy = classifier.evaluate(X_test, y_test)
+
 #print('Print the Training loss and the accuracy of the model on the dataset')
 #print('Loss [0,1]: %.4f' % (loss), 'Accuracy [0,1]: %.4f' % (accuracy))
 #print('Print the testing loss and the accuracy of the model on the dataset')
@@ -271,10 +271,8 @@ plt.savefig('loss_sample.png')
 plt.show()
 '''
 
-# Keras history keys can be 'accuracy'/'val_accuracy' or 'acc'/'val_acc' 
-# depending on Keras version/TensorFlow settings.
 history_keys = classifierHistory.history.keys()
-print(f"History keys found: {history_keys}")
+#print(f"History keys found: {history_keys}")
 
 # Determine the correct key names
 if 'accuracy' in history_keys:
