@@ -71,3 +71,71 @@ Print the Confusion Matrix:
 [ FN, TP ]=
 [[8973  738]
  [2096 7852]]
+
+#==========
+
+Plotting
+########################################
+# Part 4 - Visualizing Training and Testing Metrics
+#######################################
+
+# Import matplot lib libraries for plotting the figures. 
+import matplotlib.pyplot as plt
+
+# Keras history keys can be 'accuracy'/'val_accuracy' or 'acc'/'val_acc' 
+# depending on Keras version/TensorFlow settings.
+history_keys = classifierHistory.history.keys()
+print(f"History keys found: {history_keys}")
+
+# Determine the correct key names
+if 'accuracy' in history_keys:
+    acc_key = 'accuracy'
+    val_acc_key = 'val_accuracy'
+    loss_key = 'loss'
+    val_loss_key = 'val_loss'
+elif 'acc' in history_keys:
+    acc_key = 'acc'
+    val_acc_key = 'val_acc'
+    loss_key = 'loss'
+    val_loss_key = 'val_loss'
+else:
+    print("Error: Could not find standard accuracy/loss keys in history. Check Keras version.")
+    # Fallback to single line if validation data wasn't recorded properly
+    acc_key = 'accuracy'
+    loss_key = 'loss'
+    val_acc_key = None # Marker that validation data isn't present
+
+# --- Plot the accuracy ---
+print('Plot the accuracy (train vs test)')
+plt.figure()
+plt.plot(classifierHistory.history[acc_key], label='Train Accuracy')
+
+if val_acc_key:
+    plt.plot(classifierHistory.history[val_acc_key], label='Test Accuracy') # Added testing data
+    plt.legend(loc='lower right')
+else:
+    plt.legend(['Train Accuracy'], loc='upper left')
+
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.savefig('accuracy_train_test.png')
+plt.show()
+
+
+# --- Plot the loss ---
+print('Plot the loss (train vs test)')
+plt.figure()
+plt.plot(classifierHistory.history[loss_key], label='Train Loss')
+
+if val_loss_key:
+    plt.plot(classifierHistory.history[val_loss_key], label='Test Loss') # Added testing data
+    plt.legend(loc='upper right')
+else:
+    plt.legend(['Train Loss'], loc='upper left')
+
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.savefig('loss_train_test.png')
+plt.show()
