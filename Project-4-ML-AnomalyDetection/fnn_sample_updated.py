@@ -192,10 +192,10 @@ classifierHistory = classifier.fit(X_train, y_train, batch_size = BatchSize, epo
 # evaluate the keras model for the provided model and dataset
 loss, accuracy = classifier.evaluate(X_train, y_train)
 test_loss, test_accuracy = classifier.evaluate(X_test, y_test)
-print('Print the Training loss and the accuracy of the model on the dataset')
-print('Loss [0,1]: %.4f' % (loss), 'Accuracy [0,1]: %.4f' % (accuracy))
-print('Print the testing loss and the accuracy of the model on the dataset')
-print('Loss [0,1]: %.4f' % (test_loss), 'Accuracy [0,1]: %.4f' % (test_accuracy))
+#print('Print the Training loss and the accuracy of the model on the dataset')
+#print('Loss [0,1]: %.4f' % (loss), 'Accuracy [0,1]: %.4f' % (accuracy))
+#print('Print the testing loss and the accuracy of the model on the dataset')
+#print('Loss [0,1]: %.4f' % (test_loss), 'Accuracy [0,1]: %.4f' % (test_accuracy))
 
 # Get the final epoch’s training and validation metrics
 final_train_acc = classifierHistory.history['accuracy'][-1]
@@ -231,15 +231,15 @@ print('[ TN, FP ]')
 print('[ FN, TP ]=')
 print(cm)
 
-TN = cm[0, 0]
-FP = cm[0, 1]
-FN = cm[1, 0]
-TP = cm[1, 1]
+#TN = cm[0, 0]
+#FP = cm[0, 1]
+#FN = cm[1, 0]
+#TP = cm[1, 1]
 
-total_samples = TP + TN + FP + FN
-accuracy = (TP + TN) / total_samples
+#total_samples = TP + TN + FP + FN
+#accuracy = (TP + TN) / total_samples
 
-print(f"\nCalculated Testing Accuracy: {accuracy:.4f}")
+#print(f"\nCalculated Testing Accuracy: {accuracy:.4f}")
 ########################################
 # Part 4 - Visualizing
 #######################################
@@ -294,41 +294,76 @@ else:
     loss_key = 'loss'
     val_acc_key = None # Marker that validation data isn't present
 
-# --- Plot the accuracy ---
-print('Plot the accuracy (train vs test)')
+########################################
+# 1️⃣ Training-only plots
+########################################
+print("\nPlotting training-only accuracy and loss...")
 plt.figure()
-plt.plot(classifierHistory.history[acc_key], label='Train Accuracy')
-
-if val_acc_key:
-    plt.plot(classifierHistory.history[val_acc_key], label='Test Accuracy') # Added testing data
-    plt.legend(loc='lower right')
-else:
-    plt.legend(['Train Accuracy'], loc='upper left')
-
-plt.title('Model Accuracy')
+plt.plot(classifierHistory.history[acc_key], color='blue', linewidth=2)
+plt.title('Training Accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
-#plt.xlim(xmin=0)
-#plt.ylim(ymin=0)
-plt.savefig('accuracy_train_test.png')
+plt.grid(True)
+plt.savefig('train_accuracy_only.png')
 plt.show()
 
-
-# --- Plot the loss ---
-print('Plot the loss (train vs test)')
 plt.figure()
-plt.plot(classifierHistory.history[loss_key], label='Train Loss')
-
-if val_loss_key:
-    plt.plot(classifierHistory.history[val_loss_key], label='Test Loss') # Added testing data
-    plt.legend(loc='upper right')
-else:
-    plt.legend(['Train Loss'], loc='upper left')
-
-plt.title('Model Loss')
+plt.plot(classifierHistory.history[loss_key], color='red', linewidth=2)
+plt.title('Training Loss')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
-#plt.xlim(xmin=0)
-#plt.ylim(ymin=0)
-plt.savefig('loss_train_test.png')
+plt.grid(True)
+plt.savefig('train_loss_only.png')
 plt.show()
+
+########################################
+# 2️⃣ Testing-only plots (if available)
+########################################
+if val_acc_key in classifierHistory.history:
+    print("\nPlotting testing-only (validation) accuracy and loss...")
+    plt.figure()
+    plt.plot(classifierHistory.history[val_acc_key], color='green', linewidth=2)
+    plt.title('Validation (Testing) Accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.grid(True)
+    plt.savefig('test_accuracy_only.png')
+    plt.show()
+
+    plt.figure()
+    plt.plot(classifierHistory.history[val_loss_key], color='orange', linewidth=2)
+    plt.title('Validation (Testing) Loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.grid(True)
+    plt.savefig('test_loss_only.png')
+    plt.show()
+
+########################################
+# 3️⃣ Combined plots (train vs test)
+########################################
+print("\nPlotting combined train vs test accuracy and loss...")
+
+# --- Accuracy (Train vs Test) ---
+plt.figure()
+plt.plot(classifierHistory.history[acc_key], label='Train Accuracy', color='blue', linewidth=2)
+if val_acc_key:
+    plt.plot(classifierHistory.history[val_acc_key], label='Test Accuracy', color='green', linestyle='--', linewidth=2)
+plt.title('Training vs Testing Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(loc='lower right')
+plt.grid(True)
+plt.savefig('train_vs_test_accuracy.png')
+plt.show()
+
+# --- Loss (Train vs Test) ---
+plt.figure()
+plt.plot(classifierHistory.history[loss_key], label='Train Loss', color='red', linewidth=2)
+if val_loss_key:
+    plt.plot(classifierHistory.history[val_loss_key], label='Test Loss', color='orange', linestyle='--', linewidth=2)
+plt.title('Training vs Testing Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(loc='upper right')
+plt.grid(True)
