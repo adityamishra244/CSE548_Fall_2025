@@ -55,8 +55,11 @@ NumEpoch=10
 #NumEpoch=20
 
 
-X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
-X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary', return_subclass=True)
+#X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
+#X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary', return_subclass=True)
+
+X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='A_classes')
+X_test, y_test = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='A_classes')
 
 '''
 # Assign the selected training and testing dataset names
@@ -175,12 +178,21 @@ classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 're
 
 # Adding the output layer, 1 node, 
 # sigmoid on the output layer is to ensure the network output is between 0 and 1
-classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+#classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+
+# **Output Layer Modification**
+# The FNN now predicts 5 classes.
+output_classes = 5 
+classifier.add(Dense(units=output_classes, kernel_initializer='uniform', activation='softmax')) # <--- Softmax for multi-class
 
 # Compiling the ANN, 
 # Gradient descent algorithm “adam“, Reference: https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/
 # This loss is for a binary classification problems and is defined in Keras as “binary_crossentropy“, Reference: https://machinelearningmastery.com/how-to-choose-loss-functions-when-training-deep-learning-neural-networks/
-classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+#classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+# Compiling the ANN
+# Use categorical_crossentropy for multi-class classification
+classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']) # <--- Use categorical_crossentropy
 
 # Fitting the ANN to the Training set
 # Train the model so that it learns a good (or good enough) mapping of rows of input data to the output classification.
@@ -212,6 +224,8 @@ print(f"Validation Loss:     {final_val_loss:.4f}")
 ########################################
 # Part 3 - Making predictions and evaluating the model
 #######################################
+# Attack class labels corresponding to indices 0-4
+A_class_labels = ['Normal', 'A1 (DoS)', 'A2 (Probe)', 'A3 (U2R)', 'A4 (R2L)']
 
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
@@ -220,6 +234,30 @@ y_pred = (y_pred > 0.5).astype(int)
 # summarize the first 5 cases
 #for i in range(5):
 #	print('%s => %d (expected %d)' % (X_test[i].tolist(), y_pred[i], y_test[i]))
+
+# Convert predictions (probabilities) and true labels (one-hot) to class indices
+y_pred_classes = np.argmax(y_pred, axis=1) # Get the index of the highest probability
+y_true_classes = np.argmax(y_test, axis=1) # Get the index of the true class
+
+print("\n--- FNN Prediction Output Categorization (A1-A4) ---")
+
+# Example of categorizing the output for the first 10 test samples
+print("{:<10} {:<10} {:<15} {:<15}".format("Sample #", "Predicted", "True Label", "Prediction Mapping"))
+print("-" * 50)
+for i in range(10):
+    predicted_index = y_pred_classes[i]
+    true_index = y_true_classes[i]
+    
+    predicted_label = A_class_labels[predicted_index]
+    true_label = A_class_labels[true_index]
+
+    # You can now use these labels for reporting or further analysis
+    print("{:<10} {:<10} {:<15} {:<15}".format(i+1, predicted_index, true_label, predicted_label))
+
+# You can also generate a confusion matrix based on y_true_classes and y_pred_classes
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_true_classes, y_pred_classes)
+print("\nConfusion Matrix (Normal, A1, A2, A3, A4):\n", cm)
 
 # Making the Confusion Matrix
 # [TN, FP ]
