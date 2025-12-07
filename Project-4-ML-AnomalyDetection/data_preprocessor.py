@@ -88,7 +88,8 @@ def get_processed_data(datasetFile, categoryMappingsPath, classType='binary', re
         y = np_utils.to_categorical(y)
     
     if return_subclass:
-        return X, y, subclass_column
+        return X, y, label_column
     else:
         return X, y
+
 
