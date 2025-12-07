@@ -63,22 +63,23 @@ R2L (A4): No samples found in test set.
 
 
 Scenario-C
-============= Final Model Performance ===
-Training Accuracy:  0.9970
-Training Loss:      0.0101
-Validation Accuracy: 0.9055
-Validation Loss:     0.9914
+============
+=== Final Model Performance ===
+Training Accuracy:  0.9964
+Training Loss:      0.0112
+Validation Accuracy: 0.9104
+Validation Loss:     1.3415
 Print the Confusion Matrix:
 [ TN, FP ]
 [ FN, TP ]=
-[[9018  693]
- [1164 8784]]
+[[8938  773]
+ [ 989 8959]]
 
 classification report
               precision    recall  f1-score   support
 
-      Normal       0.89      0.93      0.91      9711
-      Attack       0.93      0.88      0.90      9948
+      Normal       0.90      0.92      0.91      9711
+      Attack       0.92      0.90      0.91      9948
 
     accuracy                           0.91     19659
    macro avg       0.91      0.91      0.91     19659
@@ -86,9 +87,9 @@ weighted avg       0.91      0.91      0.91     19659
 
 
 =====Recall (TPR) per attack Category ====
-DoS (A1): Recall (TPR) = 0.8786
-Probe (A2): Recall (TPR) = 0.9182
-U2R (A3): Recall (TPR) = 0.0213
+DoS (A1): Recall (TPR) = 0.8916
+Probe (A2): Recall (TPR) = 0.9506
+U2R (A3): Recall (TPR) = 0.0638
 R2L (A4): No samples found in test set.
 =========================================
 
