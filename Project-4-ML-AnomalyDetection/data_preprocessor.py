@@ -41,7 +41,7 @@ def get_processed_data(datasetFile, categoryMappingsPath, classType='binary', re
     inputFile = pd.read_csv(datasetFile, header=None)
     X = inputFile.iloc[:, 0:-2].values
     label_column = inputFile.iloc[:, -2].values
-    subclass_column = inputFile.iloc[:, -1].values
+    #subclass_column = inputFile.iloc[:, -1].values
     
     category_1 = np.array(pd.read_csv(categoryMappingsPath + "1.csv", header=None).iloc[:, 0].values)
     category_2 = np.array(pd.read_csv(categoryMappingsPath + "2.csv", header=None).iloc[:, 0].values)
@@ -87,9 +87,10 @@ def get_processed_data(datasetFile, categoryMappingsPath, classType='binary', re
         # Encoding the Dependent Variable
         y = np_utils.to_categorical(y)
     
+   
     if return_subclass:
+        #return X, y, subclass_column
         return X, y, label_column
     else:
         return X, y
-
 
