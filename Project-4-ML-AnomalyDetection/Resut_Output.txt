@@ -1,0 +1,94 @@
+
+Scenario-A
+==========
+=== Final Model Performance ===
+Training Accuracy:  0.9951
+Training Loss:      0.0115
+Validation Accuracy: 0.8036
+Validation Loss:     1.6273
+Print the Confusion Matrix:
+[ TN, FP ]
+[ FN, TP ]=
+[[8074 1637]
+ [1313 3993]]
+
+classification report
+              precision    recall  f1-score   support
+
+      Normal       0.86      0.83      0.85      9711
+      Attack       0.71      0.75      0.73      5306
+
+    accuracy                           0.80     15017
+   macro avg       0.78      0.79      0.79     15017
+weighted avg       0.81      0.80      0.80     15017
+
+
+=====Recall (TPR) per attack Category ====
+DoS (A1): No samples found in test set.
+Probe (A2): Recall (TPR) = 0.8914
+U2R (A3): No samples found in test set.
+R2L (A4): Recall (TPR) = 0.6995
+=========================================
+
+Scenario-B
+============
+=== Final Model Performance ===
+Training Accuracy:  0.9959
+Training Loss:      0.0130
+Validation Accuracy: 0.9050
+Validation Loss:     1.3994
+Print the Confusion Matrix:
+[ TN, FP ]
+[ FN, TP ]=
+[[8840  871]
+ [ 760 6700]]
+
+classification report
+              precision    recall  f1-score   support
+
+      Normal       0.92      0.91      0.92      9711
+      Attack       0.88      0.90      0.89      7460
+
+    accuracy                           0.91     17171
+   macro avg       0.90      0.90      0.90     17171
+weighted avg       0.91      0.91      0.91     17171
+
+
+=====Recall (TPR) per attack Category ====
+DoS (A1): Recall (TPR) = 0.8981
+Probe (A2): No samples found in test set.
+U2R (A3): No samples found in test set.
+R2L (A4): No samples found in test set.
+=========================================
+
+
+Scenario-C
+============= Final Model Performance ===
+Training Accuracy:  0.9970
+Training Loss:      0.0101
+Validation Accuracy: 0.9055
+Validation Loss:     0.9914
+Print the Confusion Matrix:
+[ TN, FP ]
+[ FN, TP ]=
+[[9018  693]
+ [1164 8784]]
+
+classification report
+              precision    recall  f1-score   support
+
+      Normal       0.89      0.93      0.91      9711
+      Attack       0.93      0.88      0.90      9948
+
+    accuracy                           0.91     19659
+   macro avg       0.91      0.91      0.91     19659
+weighted avg       0.91      0.91      0.91     19659
+
+
+=====Recall (TPR) per attack Category ====
+DoS (A1): Recall (TPR) = 0.8786
+Probe (A2): Recall (TPR) = 0.9182
+U2R (A3): Recall (TPR) = 0.0213
+R2L (A4): No samples found in test set.
+=========================================
+
