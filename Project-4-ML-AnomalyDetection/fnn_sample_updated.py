@@ -58,6 +58,9 @@ NumEpoch=10
 X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
 X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary', return_subclass=True)
 
+#X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='multiclass')
+#X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='multiclass', return_subclass=True)
+
 '''
 # Assign the selected training and testing dataset names
 if scenario == 'a':
@@ -176,12 +179,13 @@ classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 're
 # Adding the output layer, 1 node, 
 # sigmoid on the output layer is to ensure the network output is between 0 and 1
 classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+#classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'softmax'))
 
 # Compiling the ANN, 
 # Gradient descent algorithm “adam“, Reference: https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/
 # This loss is for a binary classification problems and is defined in Keras as “binary_crossentropy“, Reference: https://machinelearningmastery.com/how-to-choose-loss-functions-when-training-deep-learning-neural-networks/
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-
+#classifier.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
 # Fitting the ANN to the Training set
 # Train the model so that it learns a good (or good enough) mapping of rows of input data to the output classification.
 # add verbose=0 to turn off the progress report during the training
@@ -225,62 +229,23 @@ y_pred = (y_pred > 0.5).astype(int)
 # [TN, FP ]
 # [FN, TP ]
 from sklearn.metrics import confusion_matrix
+'''
 cm = confusion_matrix(y_test, y_pred)
 print('Print the Confusion Matrix:')
 print('[ TN, FP ]')
 print('[ FN, TP ]=')
 print(cm)
-
-for subclass in ['A2', 'A4']:
-    mask = subclass_labels == subclass
-    y_true_sub = test_y[mask]
-    y_pred_sub = predicted_y[mask]
-    
-    TP = np.sum((y_pred_sub == 1) & (y_true_sub == 1))
-    FN = np.sum((y_pred_sub == 0) & (y_true_sub == 1))
-    TPR = TP / (TP + FN + 1e-10)
-    print(f"TPR for {subclass}: {TPR:.4f}")
-    
-'''    
-def calculate_tpr_per_attack(y_true, y_pred, subclass_labels, attack_class):
-    """
-    Calculates TPR (accuracy for attack detection) for a given unknown attack class.
-    """
-    
-    print(subclass_labels.shape, type(subclass_labels))
-    print(type(attack_class), attack_class)
-    
-    attack_class = attack_class.item() if isinstance(attack_class, np.ndarray) else attack_class
-       
-    mask = subclass_labels == attack_class
-    y_true_filtered = y_true[mask]
-    y_pred_filtered = y_pred[mask]
-    
-    TP = np.sum((y_true_filtered == 1) & (y_pred_filtered == 1))
-    FN = np.sum((y_true_filtered == 1) & (y_pred_filtered == 0))
-    
-    if TP + FN == 0:
-        return 0.0
-    return TP / (TP + FN)
-
-
-if user_input.lower() == 'a':
-    print(f"SA TPR Calculation for unknown attacks")
-    tpr_A2 = calculate_tpr_per_attack(y_test, y_pred.flatten(), subclass_labels_test, 'A2')
-    tpr_A4 = calculate_tpr_per_attack(y_test, y_pred.flatten(), subclass_labels_test, 'A4')
-    avg_tpr_SA = (tpr_A2 + tpr_A4) / 2
-    print(f"Average TPR (SA unknown attacks): {avg_tpr_SA:.4f}")
-
-elif user_input.lower() == 'c':
-    print(f"SC TPR Calculation for unknown attacks")
-    tpr_A3 = calculate_tpr_per_attack(y_test, y_pred.flatten(), subclass_labels_test, 'A3')
-    print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
 '''
-#TN = cm[0, 0]
-#FP = cm[0, 1]
-#FN = cm[1, 0]
-#TP = cm[1, 1]
 
+y_true_classes = np.argmax(y_test, axis=1)
+y_pred_classes = np.argmax(y_pred, axis=1)
+
+cm = confusion_matrix(y_true_classes, y_pred_classes)
+print('Print the Confusion Matrix:')
+print(cm)
+
+print("\nClassification Report:")
+print(classification_report(y_true_classes, y_pred_classes, target_names= ['Normal', 'DoS (A1)', 'Probe (A2)', 'U2R (A3)', 'R2L (A4)']))
 #total_samples = TP + TN + FP + FN
 #accuracy = (TP + TN) / total_samples
 
