@@ -147,3 +147,13 @@ Average TPR (SA unknown attacks): 0.0000
 Plotting training-only accuracy and loss...
 /home/ubuntu/Downloads/lab-cs-ml-00301/fnn_sample_updated.py:238: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
   mask = subclass_labels == attack_class
+
+#========
+
+# Compute Recall per Attack Category (A1–A4)
+attack_groups = {
+    'A1 (DoS)': ['apache2', 'back', 'smurf', 'neptune', ...],
+    'A2 (Probe)': ['ipsweep', 'portsweep', 'satan', 'nmap', ...],
+    'A3 (U2R)': ['buffer_overflow', 'rootkit', ...],
+    'A4 (R2L)': ['guess_passwd', 'warezclient', ...]
+}
