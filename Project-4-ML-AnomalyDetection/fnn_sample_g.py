@@ -163,7 +163,7 @@ print("unique values in subclass_labels_test:", np.unique(subclass_labels_test))
 
 # The `calculate_tpr_per_attack` function is no longer needed as the logic is complex
 # and is handled by the in-line block below for the specific scenario.
-
+'''
 if user_input.lower() == 'a':
     print(f"\nSA TPR Calculation for unknown attacks (A2 and A4)")
     
@@ -215,7 +215,85 @@ elif user_input.lower() == 'c':
     tpr_A3 = TP / (TP + FN + 1e-10)
 
     print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
+'''
+# Define the lists of raw attacks for each A-class
+# A-classes are indexed 0-3 in attacks_subClass
+A1_attacks = [str.lower(a) for a in attacks_subClass[0]]
+A2_attacks = [str.lower(a) for a in attacks_subClass[1]]
+A3_attacks = [str.lower(a) for a in attacks_subClass[2]]
+A4_attacks = [str.lower(a) for a in attacks_subClass[3]]
 
+# Ensure predictions and true labels are flattened for element-wise comparison
+y_pred_flat = y_pred.flatten()
+y_test_flat = y_test.flatten()
+
+# --- START: Corrected TPR Calculation ---
+
+if user_input.lower() == 'a':
+    print(f"\nSA TPR Calculation for unknown attacks (A2 and A4)")
+    
+    TPR_A2 = 0.0
+    TPR_A4 = 0.0
+    
+    # Iterate through the required subclasses
+    # We use the raw attack lists (A2_attacks, A4_attacks) to check the raw label
+    for subclass_name, target_attack_list in [('A2', A2_attacks), ('A4', A4_attacks)]:
+        
+        # 1. FIX: Create a mask. True if the raw attack name belongs to A2 or A4.
+        # This replaces: mask = subclass_labels_test == subclass
+        mask = np.array([str.lower(label) in target_attack_list for label in subclass_labels_test])
+        
+        # Filter true labels (which must all be 1/Attack) and predicted labels
+        y_true_sub = y_test_flat[mask] 
+        y_pred_sub = y_pred_flat[mask]
+        
+        if len(y_true_sub) == 0:
+            print(f"TPR for {subclass_name}: N/A (No samples found)")
+            continue
+
+        # 2. FIX: Use the existing binary predictions (y_pred_sub) directly.
+        # The logic below works because y_true_sub only contains 1s (Attack).
+        
+        # True Positives (TP): Predicted Attack (1) AND True Attack (1)
+        TP = np.sum((y_pred_sub == 1) & (y_true_sub == 1))
+        # False Negatives (FN): Predicted Normal (0) AND True Attack (1)
+        FN = np.sum((y_pred_sub == 0) & (y_true_sub == 1))
+        
+        # TPR = TP / Total True Attacks
+        TPR = TP / (TP + FN + 1e-10)
+        
+        if subclass_name == 'A2':
+            TPR_A2 = TPR
+        elif subclass_name == 'A4':
+            TPR_A4 = TPR
+
+        print(f"TPR for {subclass_name}: {TPR:.4f}")
+    
+    avg_tpr_SA = (TPR_A2 + TPR_A4) / 2.0
+    print(f"Average TPR for SA: {avg_tpr_SA:.4f}")
+    
+elif user_input.lower() == 'c':
+    print(f"\nSC TPR Calculation for unknown attack A3")
+    
+    subclass_name = 'A3'
+    target_attack_list = A3_attacks # Use the A3 list
+    
+    # FIX: Create a mask using the raw attack names
+    mask = np.array([str.lower(label) in target_attack_list for label in subclass_labels_test])
+    
+    y_true_sub = y_test_flat[mask] 
+    y_pred_sub = y_pred_flat[mask]
+    
+    if len(y_true_sub) == 0:
+        print(f"TPR for SC unknown attack A3: N/A (No samples found)")
+    else:
+        TP = np.sum((y_pred_sub == 1) & (y_true_sub == 1))
+        FN = np.sum((y_pred_sub == 0) & (y_true_sub == 1))
+        tpr_A3 = TP / (TP + FN + 1e-10)
+
+        print(f"TPR for SC unknown attack A3: {tpr_A3:.4f}")
+
+# --- END: Corrected TPR Calculation ---
 # --- END: Updated TPR/SA Calculation ---
 
 
