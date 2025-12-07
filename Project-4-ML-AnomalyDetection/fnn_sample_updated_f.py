@@ -59,12 +59,13 @@ NumEpoch=10
 X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
 X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary', return_subclass=True)
 
+'''
 print(type(subclass_labels_test))
 try:
     print(subclass_labels_test.shape)
 except:
     print("No .shape attributes, may be list of lists")
-    
+'''
     
 #X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='multiclass')
 #X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='multiclass', return_subclass=True)
@@ -237,8 +238,6 @@ y_pred = (y_pred > 0.5).astype(int)
 
 
 
-print("\nclassification report")
-print(classification_report(y_test, y_pred_binary, target_names=['Normal', 'Attack']))
 
 # Making the Confusion Matrix
 # [TN, FP ]
@@ -250,20 +249,14 @@ print('[ TN, FP ]')
 print('[ FN, TP ]=')
 print(cm)
 
-
-y_test_flat = np.ravel(y_test)
-y_pred_flat = np.ravel(y_pred)
-attack_labels_flat = np.ravel(subclass_labels_test)
-
+print("\nclassification report")
+print(classification_report(y_test, y_pred_binary, target_names=['Normal', 'Attack']))
 
 df_results = pd.DataFrame({
     'true_label': y_test, 
     'pred_label' : y_pred_binary, 
     'attack_type': subclass_labels_test 
     })
-
-#print(df_results.shape)
-#print(df_results.head())
 
 print("\n=====Recall (TPR) per attack Category ====")
 
