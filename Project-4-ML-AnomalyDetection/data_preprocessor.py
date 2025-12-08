@@ -10,7 +10,7 @@ from keras.utils import np_utils
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
-# **NEW: Import the attack class mappings from your extractor script**
+#=============NEW: Import the attack class mappings from  distinctLabelExtractor class================**
 try:
     from distinctLabelExtractor import attacks_subClass, expectedAttackClasses
 except ImportError:
@@ -22,7 +22,8 @@ except ImportError:
         ['ftp_write', 'guess_passwd', 'httptunnel', 'imap', 'multihop', 'named', 'phf', 'sendmail', 'snmpgetattack', 'spy', 'snmpguess', 'warezclient', 'warezmaster', 'xlock', 'xsnoop']
         ]
     expectedAttackClasses = ['DoS (A1)', 'Probe (A2)', 'U2R (A3)', 'R2L (A4)']
-    
+#========================================================================================================#    
+#========================================Multi Class Processing==========================================#
 def map_attack_to_A_class(attack_name):
     """Maps an attack name to its categorical index: 0=Normal, 1=A1, 2=A2, 3=A3, 4=A4"""
     lower_name = str.lower(str(attack_name))
@@ -36,7 +37,8 @@ def map_attack_to_A_class(attack_name):
 
     # If an attack is not found in the list (e.g., a new attack type)
     return -1 # Use -1 to indicate unknown/unhandled attacks
-    
+#========================================================================================================#
+
 def get_processed_data(datasetFile, categoryMappingsPath, classType='binary', return_subclass=False):
     inputFile = pd.read_csv(datasetFile, header=None)
     X = inputFile.iloc[:, 0:-2].values
@@ -87,10 +89,11 @@ def get_processed_data(datasetFile, categoryMappingsPath, classType='binary', re
         # Encoding the Dependent Variable
         y = np_utils.to_categorical(y)
     
-   
+   # Retrun the induvidual granular attack labels
     if return_subclass:
         #return X, y, subclass_column
         return X, y, label_column
     else:
         return X, y
+
 
