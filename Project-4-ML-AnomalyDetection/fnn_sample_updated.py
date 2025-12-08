@@ -251,6 +251,7 @@ print(cm)
 print("\nclassification report")
 print(classification_report(y_test, y_pred_binary, target_names=['Normal', 'Attack']))
 
+#============Data Frame Creation==========================#
 df_results = pd.DataFrame({
     'true_label': y_test, 
     'pred_label' : y_pred_binary, 
@@ -331,7 +332,7 @@ plt.savefig('train_loss_only.png')
 plt.show()
 
 ########################################
-# Testing-only plots (if available)
+# Testing-only plots
 ########################################
 if val_acc_key in classifierHistory.history:
     print("\nPlotting testing-only (validation) accuracy and loss...")
