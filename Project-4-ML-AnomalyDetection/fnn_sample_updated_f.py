@@ -55,7 +55,7 @@ BatchSize=10
 NumEpoch=10
 #NumEpoch=20
 
-
+#introduce subclass_labels_test to caopture the return value from data_preprocessor class
 X_train, y_train = data_pre.get_processed_data(TrainingData+'.csv', './', classType ='binary')
 X_test,  y_test, subclass_labels_test  = data_pre.get_processed_data(TestingData+'.csv',  './', classType ='binary', return_subclass=True)
 
@@ -199,6 +199,8 @@ classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = [
 # Train the model so that it learns a good (or good enough) mapping of rows of input data to the output classification.
 # add verbose=0 to turn off the progress report during the training
 # To run the whole training dataset as one Batch, assign batch size: BatchSize=X_train.shape[0]
+
+#added validation_data for capturing the testing results
 classifierHistory = classifier.fit(X_train, y_train, batch_size = BatchSize, epochs = NumEpoch, validation_data=(X_test, y_test))
 
 # evaluate the keras model for the provided model and dataset
@@ -235,9 +237,6 @@ y_pred = (y_pred > 0.5).astype(int)
 # summarize the first 5 cases
 #for i in range(5):
 #	print('%s => %d (expected %d)' % (X_test[i].tolist(), y_pred[i], y_test[i]))
-
-
-
 
 # Making the Confusion Matrix
 # [TN, FP ]
@@ -310,7 +309,7 @@ else:
     val_acc_key = None # Marker that validation data isn't present
 
 ########################################
-# 1️⃣ Training-only plots
+# Training-only plots
 ########################################
 print("\nPlotting training-only accuracy and loss...")
 plt.figure()
@@ -332,7 +331,7 @@ plt.savefig('train_loss_only.png')
 plt.show()
 
 ########################################
-# 2️⃣ Testing-only plots (if available)
+# Testing-only plots (if available)
 ########################################
 if val_acc_key in classifierHistory.history:
     print("\nPlotting testing-only (validation) accuracy and loss...")
@@ -355,7 +354,7 @@ if val_acc_key in classifierHistory.history:
     plt.show()
 
 ########################################
-# 3️⃣ Combined plots (train vs test)
+# Combined plots (train vs test)
 ########################################
 print("\nPlotting combined train vs test accuracy and loss...")
 
